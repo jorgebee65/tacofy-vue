@@ -1,20 +1,20 @@
 <template>
 	<div id="dashboard">
 		<h3>Dashboard</h3>
-		<div  >
-          <md-card md-with-hover v-for="taq in taquerias">
+		<div>
+          <md-card md-with-hover v-for="taq in taquerias" v-bind:key="taq.id">
           	<md-card-media>
-          		<img :src="getImageUrl(taq.id)" />
+          		<img v-bind:src="taq.picture" />
           	</md-card-media>
 		      <md-card-header>
-		        <div class="md-title">{{taq.nombre}}</div>
+		        <div class="md-title">{{taq.name}}</div>
 		      </md-card-header>
 
 		      <md-card-content>
-		     {{taq.ubicacion}}
+		     {{taq.address}}
 		      </md-card-content>
 		      <md-card-actions>
-	            	<md-button v-bind:to="{name: 'view-element', params:{taq_id: taq.id}}">MAS</md-button>
+	            	<md-button v-bind:to="{name: 'view-element', params:{taq_id: taq.taq_id}}">MAS</md-button>
 	          </md-card-actions>
 		   </md-card>
 
@@ -22,8 +22,7 @@
 	</div>
 </template>
 <script>
-	import axios from 'axios'
-	const URL = "http://localhost:8080/tacofy/taquerias"
+	import db from './firebaseInit'
 	export default{
 		name: 'dashboard',
 		data(){
@@ -31,17 +30,22 @@
 				taquerias:[]
 			}
 		},
-	  mounted: function(){
-	    axios.get(URL).then(response => {
-	    	this.taquerias = response.data	
-	    })
-	    $('.parallax').parallax()
-	  },
-	  methods:{
-	    getImageUrl: function(id){
-	      return "http://localhost:8080/tacofy/taquerias/"+id+"/image";
-	    }
-	  }
+	  	created(){
+	  		db.collection('taquerias').get().then(
+	  			querySnapshot=>{
+	  				querySnapshot.forEach(doc =>{
+	  					console.log('objeto: '+doc.data().taq_id)
+	  					const data = {
+	  						'id':doc.id,
+	  						'taq_id':doc.data().taq_id,
+	  						'name':doc.data().name,
+	  						'address':doc.data().address,
+	  						'picture':doc.data().picture
+	  					}
+	  					this.taquerias.push(data)
+	  				})
+	  			})
+	  	}
 	}
 </script>
 <style lang="scss" scoped>

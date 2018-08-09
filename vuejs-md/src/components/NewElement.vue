@@ -1,57 +1,73 @@
 <template>
 	<div id="new-element">
-		 <md-steppers :md-active-step.sync="active" md-vertical md-linear>
-		 	<md-step id="first" md-label="First Step" md-description="Optional" :md-editable="false" :md-done.sync="first">
-		 		<div class="viewport">
+		<form @submit.prevent="saveTaqueria">
+		 	<div class="viewport">
 				<md-toolbar :md-elevation="1">
 			      <span class="md-title">Registra</span>
 			    </md-toolbar>
 			    <md-list class="md-double-line">
 			    	<md-subheader>Información General</md-subheader>
 			    	<md-list-item>
+				        <md-icon class="md-primary">exposure_plus_1</md-icon>
+				        <md-field>
+					      <label>Id</label>
+					      <md-input v-model="taqId"></md-input>
+					    </md-field>
+			        </md-list-item>
+			    	<md-list-item>
 				        <md-icon class="md-primary">store</md-icon>
-
 				        <md-field>
 					      <label>Nombre</label>
 					      <md-input v-model="name"></md-input>
 					    </md-field>
-
+			        </md-list-item>
+			        <md-list-item>
+				        <md-icon class="md-primary">location_city</md-icon>
+				        <md-field>
+					      <label>Dirección</label>
+					      <md-input v-model="address"></md-input>
+					    </md-field>
 			        </md-list-item>
 			        <md-list-item>
 				        <md-icon class="md-primary">phone</md-icon>
-
 				        <md-field>
 					      <label>Teléfono</label>
 					      <md-input v-model="phone"></md-input>
 					    </md-field>
-
+			        </md-list-item>
+			        <md-list-item>
+				        <md-icon class="md-primary">photo_camera</md-icon>
+				        <md-field>
+					      <label>Foto</label>
+					      <md-input v-model="urlImage"></md-input>
+					    </md-field>
 			        </md-list-item>
 			    </md-list>
 			    <md-list class="md-double-line">
 			    	<md-subheader>Tipo de Negocio</md-subheader>
-		    			<md-radio v-model="radio" class="radioOp" value="1">Puesto</md-radio>
-		    			<md-radio v-model="radio" class="radioOp" value="2">Local</md-radio>
-		    			<md-radio v-model="radio" class="radioOp" value="3">Restaurante</md-radio>
+		    			<md-radio v-model="radio" class="radioOp" value="puesto">Puesto</md-radio>
+		    			<md-radio v-model="radio" class="radioOp" value="local">Local</md-radio>
+		    			<md-radio v-model="radio" class="radioOp" value="restaurante">Restaurante</md-radio>
 			    </md-list>
-			    <md-button class="md-raised md-primary" @click="setDone('first', 'second')">Continue</md-button>
+			    <md-button type="submit" class="md-raised md-primary">Registrar</md-button>
+				<md-button class="md-raised" :md-ripple="false" to="/">Cancelar</md-button>
 			</div>
-		 		
-      		</md-step>
-      		<md-step id="second" md-label="Second Step" :md-error="secondStepError" :md-editable="false" :md-done.sync="second">
+		</form>	
+      		
       			<div class="viewport">
 					<md-toolbar :md-elevation="1">
 				      <span class="md-title">Amenidades</span>
 				    </md-toolbar>
 				    <md-list class="md-double-line">
-				    	<md-list-item v-for="ame in amenidades">
-						    <md-checkbox v-model="selectedAmen"  v-bind:value="ame.id">{{ame.descripcion}}</md-checkbox>
+				    	<md-list-item v-for="ame in amenidades" v-bind:key="ame.id">
+				    		<md-icon class="md-primary">{{ame.icon}}</md-icon>
+				    		<div class="md-list-item-text">
+						    	<md-checkbox v-model="selectedAmen"  v-bind:value="ame.id">{{ame.name}}</md-checkbox>
+							</div>
 				        </md-list-item>
 				    </md-list>
-				    <md-button class="md-raised md-primary" @click="setDone('second', 'third')">Continue</md-button>
-        			<md-button class="md-raised md-primary" @click="setError()">Set error!</md-button>
 				</div>
-      		</md-step>
-      		<md-step id="third" md-label="Third Step" :md-editable="false" :md-done.sync="third">
+      		
       			<div class="viewport">
 					<md-toolbar :md-elevation="1">
 				      <span class="md-title">Redes Sociales</span>
@@ -82,8 +98,7 @@
 				   </md-list>
 				   <md-button class="md-raised md-primary" @click="setDone('third')">Done</md-button>
 				</div>
-      		</md-step>
-		 </md-steppers>
+      		
 		<form>
 			
 			
@@ -91,44 +106,50 @@
 	</div>
 </template>
 <script>
-	import axios from 'axios'
-	const URL = "http://localhost:8080/tacofy/amenidades"
+	import db from './firebaseInit'
 	export default{
 		name:'new-element',
 		data: () => ({
+			taqId:0,
 			name: 'Taquería',
+			address: 'Av Siempre Viva',
       		phone: '55-65-98569',
-      		radio: false,
+      		radio: 'puesto',
+      		urlImage:'',
       		amenidades:[],
       		selectedAmen:[],
       		facebook:'',
       		instagram:'',
-      		website:'www.tacofy.com',
-      		active: 'first',
-	        first: false,
-	        second: false,
-	        third: false,
-	        secondStepError: null
+      		website:'www.tacofy.com'
 		}),
-		methods: {
-	      setDone (id, index) {
-	        this[id] = true
-
-	        this.secondStepError = null
-
-	        if (index) {
-	          this.active = index
-	        }
-	      },
-	      setError () {
-	        this.secondStepError = 'This is an error!'
-	      }
-	    },
-		mounted: function(){
-		    axios.get(URL).then(response => {
-		    	this.amenidades = response.data	
-		    })
-		  }
+		methods:{
+			saveTaqueria(){
+				db.collection('taquerias').add({
+					taq_id:this.taqId,
+					name:this.name,
+					address:this.address,
+					phone:this.phone,
+					type:this.radio,
+					picture:this.urlImage
+				})
+				.then(docRef => this.$router.push('/'))
+				.catch(	error=> console.log(error))
+			}
+		},
+	  	created(){
+	  		db.collection('amenidades').get().then(
+	  			querySnapshot=>{
+	  				querySnapshot.forEach(doc =>{
+	  					console.log('objeto: '+doc.data().taq_id)
+	  					const data = {
+	  						'id':doc.id,
+	  						'name':doc.data().name,
+	  						'icon':doc.data().icon
+	  					}
+	  					this.amenidades.push(data)
+	  				})
+	  			})
+	  	}
 	}
 </script>
 <style lang="scss" scoped>
