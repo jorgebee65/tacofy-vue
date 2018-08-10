@@ -7,7 +7,7 @@ import EditElement from '@/components/EditElement'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/',
@@ -31,3 +31,37 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next)=>{
+  if(to.matched.some(record => record.meta.requiresAuth)){
+    if(!firebase.auth().currentUser){
+      //go to login
+      console.log('Router: no hay usuario')
+      next({
+        path: '/',
+        query: {
+          redirect: to.fullPath
+        }
+      });
+    }else{
+      //Procede to route
+      next();
+    }
+  }else if(to.matched.some(record => record.meta.requiresGuest)){
+    if(firebase.auth().currentUser){
+      next({
+        path: '/',
+        query: {
+          redirect: to.fullPath
+        }
+      });
+    }else{
+      //Procede to route
+      next();
+    }
+  }else{
+    next();
+  }
+})
+
+export default router;

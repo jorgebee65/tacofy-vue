@@ -1,23 +1,24 @@
 <template>
 	<div id="dashboard">
-		<h3>Dashboard</h3>
-		<div>
-          <md-card md-with-hover v-for="taq in taquerias" v-bind:key="taq.id">
-          	<md-card-media>
-          		<img v-bind:src="taq.picture" />
-          	</md-card-media>
-		      <md-card-header>
-		        <div class="md-title">{{taq.name}}</div>
-		      </md-card-header>
+		<h3>Taquerias</h3>
+		<div class="md-layout md-gutter md-alignment-center">
+			<div class="md-layout-item md-xlarge-size-20 md-large-size-25 md-medium-size-33 md-small-size-100 md-xsmall-size-100" v-for="taq in taquerias" v-bind:key="taq.id">
+	          <md-card md-with-hover>
+	          	<md-card-media>
+	          		<img v-bind:src="taq.picture" />
+	          	</md-card-media>
+			      <md-card-header>
+			        <div class="md-title">{{taq.name}}</div>
+			      </md-card-header>
 
-		      <md-card-content>
-		     {{taq.address}}
-		      </md-card-content>
-		      <md-card-actions>
-	            	<md-button v-bind:to="{name: 'view-element', params:{taq_id: taq.taq_id}}">MAS</md-button>
-	          </md-card-actions>
-		   </md-card>
-
+			      <md-card-content>
+			     {{taq.address}}
+			      </md-card-content>
+			      <md-card-actions>
+		            	<md-button v-bind:to="{name: 'view-element', params:{taq_id: taq.taq_id}}">MAS</md-button>
+		          </md-card-actions>
+			   </md-card>
+			</div>
         </div>
 	</div>
 </template>

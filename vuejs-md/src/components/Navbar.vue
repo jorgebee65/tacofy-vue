@@ -16,7 +16,7 @@
 		          <md-tabs class="md-primary">
 		            <md-tab to="/" md-label="Home"/>
 		            <md-tab to="/new" md-label="Registro"/>
-		            <md-tab v-if="showButton" @click="logout" md-label="Cerrar Sesión"></md-tab>
+		            <md-tab v-if="logOutBtn ===true" @click="logout" md-label="Cerrar Sesión"></md-tab>
 		            <md-tab v-else @click="login" md-label="Iniciar Sesión"></md-tab>
 		          </md-tabs>
 		        </div>
@@ -25,38 +25,46 @@
 	</div>
 </template>
 <script>
-	import firebase from './firebaseInit'
+	import firebase from 'firebase'
 	export default{
 		name:'dashboard',
 		data(){
 			return {
-				showButton:false,
+				logOutBtn:false,
 				menuVisible: false
 			}
 		},
 		methods:{
 			validate:function(){
-				firebase.auth().onAuthStateChanged(function(user) {
-					console.log('Usuario: '+user);
-					this.showButton=(user==null)
-				});
+				console.log('validando inicio de sesión')
+				if(firebase.auth().currentUser){
+					console.log('Hay usuario')
+					this.logOutBtn=true
+				}else{
+					console.log('no Hay usuario')
+					this.logOutBtn=false
+				}
 			},
 			login:function(){
-				console.log('Login');
-				var provider = new firebase.auth.FacebookAuthProvider();
-				provider.addScope('public_profile');
+				console.log('Login')
+				var provider = new firebase.auth.FacebookAuthProvider()
+				provider.addScope('public_profile')
 				firebase.auth().signInWithPopup(provider)
 				.then((datosUsuario) =>{
-					this.showButton=true;
+					alert('Inicio sesión como: '+datosUsuario.user.displayName)
+					this.logOutBtn= true
 				}).catch(function(error){
-					console.log(error);
-				});
+					console.log(error)
+				})
 			},
 			logout:function(){
-				var provider = new firebase.auth.FacebookAuthProvider();
-				firebase.auth().signOut().then(()=>{
-					this.showButton= false;
-				});
+				if(confirm('Are you sure to logout?')){
+					var provider = new firebase.auth.FacebookAuthProvider()
+					firebase.auth().signOut()
+					.then(()=>{
+						this.logOutBtn= false
+					})
+				}
 			}
 		},
 		mounted() {

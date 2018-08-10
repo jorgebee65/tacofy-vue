@@ -1,41 +1,45 @@
 <template>
 	<div id="view-element">
-		<md-card class="md-card-example">
-			<md-card-area md-inset>
-				<md-card-media md-ratio="16:9">
-		          <img v-bind:src="picture" />
-		        </md-card-media>
-		        <md-card-header>
-		          <h2 class="md-title">{{name}}</h2>
-		          <div class="md-subhead">
-		            <md-icon>location_on</md-icon>
-		            <span>2 miles</span>
-		          </div>
-		        </md-card-header>
-		        <md-card-content>
-          			Illy Coffee served with a complimentary Leonidas Belgian Chocolate with all beverages.
-          			<p>
-          				Phone: {{phone}}
-          			</p>
-        		</md-card-content>
-			</md-card-area>
-			<md-card-content>
-	        <h3 class="md-subheading">Disponibilidad de horario hoy</h3>
-	        <div class="card-reservation">
-	          <md-icon>access_time</md-icon>
-	          <div class="md-button-group">
-	            <md-button>5:30PM</md-button>
-	            <md-button>7:30PM</md-button>
-	            <md-button>9:00PM</md-button>
-	          </div>
-	        </div>
-	      </md-card-content>
+		<div class="md-layout md-gutter md-alignment-center">
+			<div class="md-layout-item md-xlarge-size-50 md-large-size-50 md-medium-size-33 md-small-size-100 md-xsmall-size-100">
+				<md-card class="md-card-example">
+					<md-card-area md-inset>
+						<md-card-media md-ratio="16:9">
+				          <img v-bind:src="picture" />
+				        </md-card-media>
+				        <md-card-header>
+				          <h2 class="md-title">{{name}}</h2>
+				          <div class="md-subhead">
+				            <md-icon>location_on</md-icon>
+				            <span>2 miles</span>
+				          </div>
+				        </md-card-header>
+				        <md-card-content>
+		          			Illy Coffee served with a complimentary Leonidas Belgian Chocolate with all beverages.
+		          			<p>
+		          				Phone: {{phone}}
+		          			</p>
+		        		</md-card-content>
+					</md-card-area>
+					<md-card-content>
+			        <h3 class="md-subheading">Disponibilidad de horario hoy</h3>
+			        <div class="card-reservation">
+			          <md-icon>access_time</md-icon>
+			          <div class="md-button-group">
+			            <md-button>5:30PM</md-button>
+			            <md-button>7:30PM</md-button>
+			            <md-button>9:00PM</md-button>
+			          </div>
+			        </div>
+			      </md-card-content>
 
-	      <md-card-actions>
-	        <md-button v-bind:to="{name:'edit-element', params:{taq_id:taq_id}}" class="md-primary">Editar</md-button>
-	        <md-button @click="deleteTaq" :md-ripple="false">Eliminar</md-button>
-	      </md-card-actions>
-		</md-card>
+			      <md-card-actions>
+			        <md-button v-bind:to="{name:'edit-element', params:{taq_id:taq_id}}" class="md-primary">Editar</md-button>
+			        <md-button @click="deleteTaq" :md-ripple="false">Eliminar</md-button>
+			      </md-card-actions>
+				</md-card>
+			</div>
+		</div>
 	</div>
 </template>
 <script>
@@ -99,13 +103,6 @@
 	}
 </script>
 <style lang="scss" scoped>
-  .md-card {
-    width: 520px;
-    margin: 4px;
-    display: inline-block;
-    vertical-align: top;
-  }
-
   .md-app {
     max-height: 400px;
     border: 1px solid rgba(#000, .12);

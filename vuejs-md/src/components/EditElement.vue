@@ -1,59 +1,62 @@
 <template>
 	<div id="edit-element">
-		<h3>Edit-element</h3>
-		<form @submit.prevent="updateTaq">
-		 	<div class="viewport">
-				<md-toolbar :md-elevation="1">
-			      <span class="md-title">Editar</span>
-			    </md-toolbar>
-			    <md-list class="md-double-line">
-			    	<md-subheader>Información General</md-subheader>
-			    	<md-list-item>
-				        <md-icon class="md-primary">exposure_plus_1</md-icon>
-				        <md-field>
-					      <label>Id</label>
-					      <md-input v-model="taqId" disabled ></md-input>
-					    </md-field>
-			        </md-list-item>
-			    	<md-list-item>
-				        <md-icon class="md-primary">store</md-icon>
-				        <md-field>
-					      <label>Nombre</label>
-					      <md-input v-model="name"></md-input>
-					    </md-field>
-			        </md-list-item>
-			        <md-list-item>
-				        <md-icon class="md-primary">location_city</md-icon>
-				        <md-field>
-					      <label>Dirección</label>
-					      <md-input v-model="address"></md-input>
-					    </md-field>
-			        </md-list-item>
-			        <md-list-item>
-				        <md-icon class="md-primary">phone</md-icon>
-				        <md-field>
-					      <label>Teléfono</label>
-					      <md-input v-model="phone"></md-input>
-					    </md-field>
-			        </md-list-item>
-			        <md-list-item>
-				        <md-icon class="md-primary">photo_camera</md-icon>
-				        <md-field>
-					      <label>Foto</label>
-					      <md-input v-model="urlImage"></md-input>
-					    </md-field>
-			        </md-list-item>
-			    </md-list>
-			    <md-list class="md-double-line">
-			    	<md-subheader>Tipo de Negocio</md-subheader>
-		    			<md-radio v-model="radio" class="radioOp" value="puesto">Puesto</md-radio>
-		    			<md-radio v-model="radio" class="radioOp" value="local">Local</md-radio>
-		    			<md-radio v-model="radio" class="radioOp" value="restaurante">Restaurante</md-radio>
-			    </md-list>
-			    <md-button type="submit" class="md-raised md-primary">Registrar</md-button>
-				<md-button class="md-raised" :md-ripple="false" to="/">Cancelar</md-button>
+		<div class="md-layout md-gutter md-alignment-center">
+			<div class="md-layout-item md-xlarge-size-40 md-large-size-50 md-medium-size-33 md-small-size-100 md-xsmall-size-100">
+				<form @submit.prevent="updateTaq">
+				 	<div>
+						<md-toolbar :md-elevation="1">
+					      <span class="md-title">Editar</span>
+					    </md-toolbar>
+					    <md-list class="md-double-line">
+					    	<md-subheader>Información General</md-subheader>
+					    	<md-list-item>
+						        <md-icon class="md-primary">exposure_plus_1</md-icon>
+						        <md-field>
+							      <label>Id</label>
+							      <md-input v-model="taqId" disabled ></md-input>
+							    </md-field>
+					        </md-list-item>
+					    	<md-list-item>
+						        <md-icon class="md-primary">store</md-icon>
+						        <md-field>
+							      <label>Nombre</label>
+							      <md-input v-model="name"></md-input>
+							    </md-field>
+					        </md-list-item>
+					        <md-list-item>
+						        <md-icon class="md-primary">location_city</md-icon>
+						        <md-field>
+							      <label>Dirección</label>
+							      <md-input v-model="address"></md-input>
+							    </md-field>
+					        </md-list-item>
+					        <md-list-item>
+						        <md-icon class="md-primary">phone</md-icon>
+						        <md-field>
+							      <label>Teléfono</label>
+							      <md-input v-model="phone"></md-input>
+							    </md-field>
+					        </md-list-item>
+					        <md-list-item>
+						        <md-icon class="md-primary">photo_camera</md-icon>
+						        <md-field>
+							      <label>Foto</label>
+							      <md-input v-model="urlImage"></md-input>
+							    </md-field>
+					        </md-list-item>
+					    </md-list>
+					    <md-list class="md-double-line">
+					    	<md-subheader>Tipo de Negocio</md-subheader>
+				    			<md-radio v-model="radio" class="radioOp" value="puesto">Puesto</md-radio>
+				    			<md-radio v-model="radio" class="radioOp" value="local">Local</md-radio>
+				    			<md-radio v-model="radio" class="radioOp" value="restaurante">Restaurante</md-radio>
+					    </md-list>
+					    <md-button type="submit" class="md-raised md-primary">Actualizar</md-button>
+						<md-button class="md-raised" :md-ripple="false" to="/">Cancelar</md-button>
+					</div>
+				</form>	
 			</div>
-		</form>	
+		</div>
 	</div>
 </template>
 <script>
@@ -126,14 +129,6 @@
 	}
 </script>
 <style lang="scss" scoped>
-  .viewport {
-    width: 500px;
-    max-width: 100%;
-    display: inline-block;
-    vertical-align: top;
-    overflow: auto;
-    border: 1px solid rgba(#000, .12);
-  }
   .radioOp{
   	padding-left: 30px;
   }
