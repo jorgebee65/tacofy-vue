@@ -41,9 +41,10 @@
 						        <md-icon class="md-primary">photo_camera</md-icon>
 						        <md-field>
 							      <label>Foto</label>
-							      <md-input v-model="urlImage"></md-input>
+							      <md-file @change="onFileSelected" />
 							    </md-field>
 					        </md-list-item>
+					        <img v-bind:src="urlImage" />
 					    </md-list>
 					    <md-list class="md-double-line">
 					    	<md-subheader>Tipo de Negocio</md-subheader>
@@ -107,6 +108,7 @@
 </template>
 <script>
 	import db from './firebaseInit'
+	import firebase from 'firebase'
 	export default{
 		name:'new-element',
 		data: () => ({
@@ -115,27 +117,68 @@
 			address: 'Av Siempre Viva',
       		phone: '55-65-98569',
       		radio: 'puesto',
-      		urlImage:'',
+      		image:null,
       		amenidades:[],
       		selectedAmen:[],
       		facebook:'',
       		instagram:'',
-      		website:'www.tacofy.com'
+      		website:'www.tacofy.com',
+      		urlImage:''
 		}),
 		methods:{
 			saveTaqueria(){
+				if(!this.image){
+					return
+				}
+				let key
 				db.collection('taquerias').add({
 					taq_id:this.taqId,
 					name:this.name,
 					address:this.address,
 					phone:this.phone,
-					type:this.radio,
-					picture:this.urlImage
+					type:this.radio
 				})
 				.then(docRef => {
-					this.$router.push('/')
+					key = this.taqId
+					console.log('guardado exitoso '+key)
+					return key
+					//this.$router.push('/')
 					})
+				.then(key =>{
+					const filename = this.image.name
+					console.log('filename: '+filename)
+					if (!filename || !filename.length) { return }
+					let ext = filename.slice(filename.lastIndexOf('.'))
+					return firebase.storage().ref('taquerias/'+key+'.'+ext).put(this.image)
+				})
+				.then(fileData=>{
+					return fileData.ref.getDownloadURL()
+				})
+				.then(downloadURL => {
+					console.log('File available at', downloadURL)
+					this.urlImage = downloadURL
+					console.log('urImage: '+this.urlImage)
+					console.log('key: '+key)
+					db.collection('taquerias').where('taq_id','==',key).get()
+					.then(querySnapshot =>{
+						querySnapshot.forEach(doc => {
+							doc.ref.update({
+								picture: this.urlImage
+							})
+						})
+					})
+				})
 				.catch(	error=> console.log(error))
+			},
+			onFileSelected(event){
+				console.log('onFileSelected')
+				const files = event.target.files
+				const fileReader = new FileReader()
+				fileReader.addEventListener('load', ()=>{
+					this.urlImage = fileReader.result
+				})
+				fileReader.readAsDataURL(files[0])
+				this.image = files[0]
 			}
 		},
 	  	created(){
