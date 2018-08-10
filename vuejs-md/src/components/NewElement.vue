@@ -13,28 +13,28 @@
 						        <md-icon class="md-primary">exposure_plus_1</md-icon>
 						        <md-field>
 							      <label>Id</label>
-							      <md-input v-model="taqId"></md-input>
+							      <md-input v-model="taqId" required></md-input>
 							    </md-field>
 					        </md-list-item>
 					    	<md-list-item>
 						        <md-icon class="md-primary">store</md-icon>
 						        <md-field>
 							      <label>Nombre</label>
-							      <md-input v-model="name"></md-input>
+							      <md-input v-model="name" required></md-input>
 							    </md-field>
 					        </md-list-item>
 					        <md-list-item>
 						        <md-icon class="md-primary">location_city</md-icon>
 						        <md-field>
 							      <label>Dirección</label>
-							      <md-input v-model="address"></md-input>
+							      <md-input v-model="address" required></md-input>
 							    </md-field>
 					        </md-list-item>
 					        <md-list-item>
 						        <md-icon class="md-primary">phone</md-icon>
 						        <md-field>
 							      <label>Teléfono</label>
-							      <md-input v-model="phone"></md-input>
+							      <md-input v-model="phone" required></md-input>
 							    </md-field>
 					        </md-list-item>
 					        <md-list-item>
@@ -45,6 +45,12 @@
 							    </md-field>
 					        </md-list-item>
 					        <img v-bind:src="urlImage" />
+					        <md-list-item>
+						        <md-field>
+							      <label>Descripción</label>
+							      <md-textarea v-model="description" required></md-textarea>
+							    </md-field>
+						    </md-list-item>
 					    </md-list>
 					    <md-list class="md-double-line">
 					    	<md-subheader>Tipo de Negocio</md-subheader>
@@ -58,6 +64,13 @@
 				</form>	
 			</div>
 		</div>
+		<md-dialog :md-active.sync="showDialog">
+			<md-dialog-title>Registro</md-dialog-title>
+			<md-content class="contentPnl">Su registro fue guardado exitosamente</md-content>
+			<md-dialog-actions>
+		    	<md-button class="md-primary" @click="goHome">Close</md-button>
+		    </md-dialog-actions>
+		</md-dialog>
       		<!--
       			<div class="viewport">
 					<md-toolbar :md-elevation="1">
@@ -113,17 +126,16 @@
 		name:'new-element',
 		data: () => ({
 			taqId:0,
-			name: 'Taquería',
-			address: 'Av Siempre Viva',
-      		phone: '55-65-98569',
+			name: null,
+			address: null,
+      		phone: null,
       		radio: 'puesto',
       		image:null,
       		amenidades:[],
       		selectedAmen:[],
-      		facebook:'',
-      		instagram:'',
-      		website:'www.tacofy.com',
-      		urlImage:''
+      		showDialog:false,
+      		urlImage:'',
+      		description:null
 		}),
 		methods:{
 			saveTaqueria(){
@@ -136,13 +148,13 @@
 					name:this.name,
 					address:this.address,
 					phone:this.phone,
-					type:this.radio
+					type:this.radio,
+					description: this.description
 				})
 				.then(docRef => {
 					key = this.taqId
 					console.log('guardado exitoso '+key)
 					return key
-					//this.$router.push('/')
 					})
 				.then(key =>{
 					const filename = this.image.name
@@ -167,6 +179,9 @@
 							})
 						})
 					})
+					//this.showDialog = true
+					this.$swal('Taqueria '+this.name+' guardada satisfactoriamente')
+					this.$router.push('/')
 				})
 				.catch(	error=> console.log(error))
 			},
@@ -179,6 +194,9 @@
 				})
 				fileReader.readAsDataURL(files[0])
 				this.image = files[0]
+			},
+			goHome(){
+				this.$router.push('/')
 			}
 		},
 	  	created(){
@@ -200,5 +218,9 @@
 <style lang="scss" scoped>
   .radioOp{
   	padding-left: 30px;
+  }
+  .contentPnl{
+  	padding-left: 30px;
+  	padding-right: 30px;
   }
 </style>

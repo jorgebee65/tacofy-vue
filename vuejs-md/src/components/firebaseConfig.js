@@ -4,5 +4,6 @@ export default {
     databaseURL: "https://tacofy-2f5e1.firebaseio.com",
     projectId: "tacofy-2f5e1",
     storageBucket: "tacofy-2f5e1.appspot.com",
-    messagingSenderId: "1054393517966"
+    messagingSenderId: "1054393517966",
+    timestampsInSnapshots: true
 }

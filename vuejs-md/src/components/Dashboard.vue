@@ -35,7 +35,6 @@
 	  		db.collection('taquerias').get().then(
 	  			querySnapshot=>{
 	  				querySnapshot.forEach(doc =>{
-	  					console.log('objeto: '+doc.data().taq_id)
 	  					const data = {
 	  						'id':doc.id,
 	  						'taq_id':doc.data().taq_id,

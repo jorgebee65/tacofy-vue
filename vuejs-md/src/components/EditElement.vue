@@ -37,13 +37,30 @@
 							      <md-input v-model="phone"></md-input>
 							    </md-field>
 					        </md-list-item>
+					        <md-card>
+						      <md-card-header>
+						        <md-card-header-text>
+						          <div class="md-title">{{name}}</div>
+						          <div class="md-subhead">Foto Principal</div>
+						        </md-card-header-text>
+
+						        <md-card-media md-big>
+						         	<img v-bind:src="urlImage" />
+						        </md-card-media>
+						      </md-card-header>
+
+						      <md-card-actions>
+						        <md-button>Eliminar</md-button>
+						        <md-button>Cambiar</md-button>
+						      </md-card-actions>
+						    </md-card>
+					         
 					        <md-list-item>
-						        <md-icon class="md-primary">photo_camera</md-icon>
 						        <md-field>
-							      <label>Foto</label>
-							      <md-input v-model="urlImage"></md-input>
+							      <label>Descripción</label>
+							      <md-textarea v-model="description"></md-textarea>
 							    </md-field>
-					        </md-list-item>
+						    </md-list-item>
 					    </md-list>
 					    <md-list class="md-double-line">
 					    	<md-subheader>Tipo de Negocio</md-subheader>
@@ -70,7 +87,8 @@
 	  			address:null,
 	  			urlImage:null,
 	  			phone:null,
-	  			radio:null
+	  			radio:null,
+	  			description:null
 			}
 		},
 		beforeRouteEnter(to,from,next){
@@ -85,6 +103,7 @@
 	  					vm.urlImage=doc.data().picture
 	  					vm.phone=doc.data().phone
 	  					vm.radio=doc.data().type
+	  					vm.description=doc.data().description
 					})
 				})
 			})
@@ -104,6 +123,7 @@
 	  				this.urlImage=doc.data().picture
 	  				this.phone=doc.data().phone
 	  				this.radio=doc.data().type
+	  				this.description=doc.data().description
 				})
 			})
 			},
@@ -117,7 +137,8 @@
 						address: this.address,
 						picture: this.urlImage,
 						phone: this.phone,
-						type: this.radio
+						type: this.radio,
+						description: this.description
 					}).then(()=>{
 						this.$router.push({name:'view-element',
 							params:{taq_id:this.taqId}})

@@ -15,10 +15,7 @@
 				          </div>
 				        </md-card-header>
 				        <md-card-content>
-		          			Illy Coffee served with a complimentary Leonidas Belgian Chocolate with all beverages.
-		          			<p>
-		          				Phone: {{phone}}
-		          			</p>
+		          			{{description}}
 		        		</md-card-content>
 					</md-card-area>
 					<md-card-content>
@@ -52,7 +49,8 @@
 	  			name:null,
 	  			address:null,
 	  			picture:null,
-	  			phone:null
+	  			phone:null,
+	  			description:null
 			}
 		},
 		beforeRouteEnter(to,from,next){
@@ -66,6 +64,7 @@
 	  					vm.address=doc.data().address
 	  					vm.picture=doc.data().picture
 	  					vm.phone=doc.data().phone
+	  					vm.description=doc.data().description
 					})
 				})
 			})
@@ -84,20 +83,42 @@
 	  				this.address=doc.data().address
 	  				this.picture=doc.data().picture
 	  				this.phone=doc.data().phone
+	  				this.description=doc.data().description
 				})
 			})
 			},
 			deleteTaq(){
+				this.$swal({
+						  title: 'Are you sure?',
+						  text: "You won't be able to revert this!",
+						  type: 'warning',
+						  showCancelButton: true,
+						  confirmButtonColor: '#3085d6',
+						  cancelButtonColor: '#d33',
+						  confirmButtonText: 'Yes, delete it!'
+						}).then((result) => {
+						  if (result.value) {
+						    db.collection('taquerias').where('taq_id',
+							'==',this.$route.params.taq_id).get()
+							.then(querySnapshot =>{
+								querySnapshot.forEach(doc => {
+								doc.ref.delete()
+								this.$router.push('/')
+								})
+							})
+						  }
+						})
+				/*
 				if(confirm('Are you sure?')){
 					db.collection('taquerias').where('taq_id',
-				'==',this.$route.params.taq_id).get()
-			.then(querySnapshot =>{
-				querySnapshot.forEach(doc => {
-					doc.ref.delete()
-					this.$router.push('/')
-				})
-			})
-				}
+					'==',this.$route.params.taq_id).get()
+					.then(querySnapshot =>{
+						querySnapshot.forEach(doc => {
+						doc.ref.delete()
+						this.$router.push('/')
+						})
+					})
+				}*/
 			}
 		}
 	}
