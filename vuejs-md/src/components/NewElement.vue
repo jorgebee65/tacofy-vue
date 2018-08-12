@@ -58,35 +58,25 @@
 				    			<md-radio v-model="radio" class="radioOp" value="local">Local</md-radio>
 				    			<md-radio v-model="radio" class="radioOp" value="restaurante">Restaurante</md-radio>
 					    </md-list>
-				       		<md-button type="submit" class="md-raised md-primary" @click="second = true">Guardar</md-button>
-							<md-button class="md-raised" to="/">Cancelar</md-button>
+				       		
 					</div>
+					<div class="viewport">
+						<md-toolbar :md-elevation="1">
+					      <span class="md-title">Amenidades</span>
+					    </md-toolbar>
+					    <md-list class="md-double-line">
+					    	<md-list-item v-for="ame in amenidades" v-bind:key="ame.id">
+					    		<md-icon class="md-primary">{{ame.icon}}</md-icon>
+					    		<div class="md-list-item-text">
+							    	<md-checkbox v-model="selectedAmen"  v-bind:value="ame">{{ame.name}}</md-checkbox>
+								</div>
+					        </md-list-item>
+					    </md-list>
+					</div>
+						<md-button type="submit" class="md-raised md-primary" @click="second = true">Guardar</md-button>
+						<md-button class="md-raised" to="/">Cancelar</md-button>
 				</form>	
-			</div>
-		</div>
-		<md-dialog :md-active.sync="showDialog">
-			<md-dialog-title>Registro</md-dialog-title>
-			<md-content class="contentPnl">Su registro fue guardado exitosamente</md-content>
-			<md-dialog-actions>
-		    	<md-button class="md-primary" @click="goHome">Close</md-button>
-		    </md-dialog-actions>
-		</md-dialog>
-      		<!--
-      			<div class="viewport">
-					<md-toolbar :md-elevation="1">
-				      <span class="md-title">Amenidades</span>
-				    </md-toolbar>
-				    <md-list class="md-double-line">
-				    	<md-list-item v-for="ame in amenidades" v-bind:key="ame.id">
-				    		<md-icon class="md-primary">{{ame.icon}}</md-icon>
-				    		<div class="md-list-item-text">
-						    	<md-checkbox v-model="selectedAmen"  v-bind:value="ame.id">{{ame.name}}</md-checkbox>
-							</div>
-				        </md-list-item>
-				    </md-list>
-				</div>
-      		
-      			<div class="viewport">
+      			<!--div class="viewport">
 					<md-toolbar :md-elevation="1">
 				      <span class="md-title">Redes Sociales</span>
 				    </md-toolbar>
@@ -115,8 +105,9 @@
 				        </md-list-item>
 				   </md-list>
 				   <md-button class="md-raised md-primary" @click="setDone('third')">Done</md-button>
-				</div>
-      		-->
+				</div-->
+			</div>
+      	</div>
 	</div>
 </template>
 <script>
@@ -126,16 +117,16 @@
 		name:'new-element',
 		data: () => ({
 			taqId:0,
-			name: null,
-			address: null,
-      		phone: null,
+			name: 'Taqueria Los ',
+			address: 'Call San Felipe Neri 987',
+      		phone: '(272) 87 5-9887',
       		radio: 'puesto',
       		image:null,
       		amenidades:[],
       		selectedAmen:[],
       		showDialog:false,
       		urlImage:'',
-      		description:null
+      		description:'Los feligreses de esta catedral del taco estilo Tixtla, Guerrero, vienen a postrarse ante un plato chico, mediano o grande del exquisito caldo blanco con su consabido maíz en grano. '
 		}),
 		methods:{
 			saveTaqueria(){
@@ -149,7 +140,8 @@
 					address:this.address,
 					phone:this.phone,
 					type:this.radio,
-					description: this.description
+					description: this.description,
+					amenities: this.selectedAmen
 				})
 				.then(docRef => {
 					key = this.taqId
@@ -180,7 +172,11 @@
 						})
 					})
 					//this.showDialog = true
-					this.$swal('Taqueria '+this.name+' guardada satisfactoriamente')
+					this.$toasted.show("Taqueria guardada correctamente", { 
+						 theme: "bubble", 
+						 position: "top-right", 
+						 duration : 5000
+					})
 					this.$router.push('/')
 				})
 				.catch(	error=> console.log(error))

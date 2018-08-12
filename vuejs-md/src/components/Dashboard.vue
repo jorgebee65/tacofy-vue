@@ -2,10 +2,17 @@
 	<div id="dashboard">
 		<h3>Taquerias</h3>
 		<div class="md-layout md-gutter md-alignment-center">
-			<div class="md-layout-item md-xlarge-size-20 md-large-size-25 md-medium-size-33 md-small-size-100 md-xsmall-size-100" v-for="taq in taquerias" v-bind:key="taq.id">
+			<div class="md-layout-item md-xlarge-size-20 md-large-size-25 md-medium-size-33 md-small-size-100 md-xsmall-size-100">
+	      		<md-input v-model="search" placeholder="buscar"/>
+			    <md-icon>search</md-icon>
+			</div>
+  		</div>
+		<div class="md-layout md-gutter md-alignment-center">
+			<div class="md-layout-item md-xlarge-size-20 md-large-size-25 md-medium-size-33 md-small-size-100 md-xsmall-size-100" 
+				v-for="taq in filteredTaqs" v-bind:key="taq.id">
 	          <md-card md-with-hover>
 	          	<md-card-media>
-	          		<img v-bind:src="taq.picture" />
+	          		<img v-bind:src="taq.picture"/>
 	          	</md-card-media>
 			      <md-card-header>
 			        <div class="md-title">{{taq.name}}</div>
@@ -28,7 +35,8 @@
 		name: 'dashboard',
 		data(){
 			return{
-				taquerias:[]
+				taquerias:[],
+				search:''
 			}
 		},
 	  	created(){
@@ -45,6 +53,13 @@
 	  					this.taquerias.push(data)
 	  				})
 	  			})
+	  	},
+	  	computed:{
+	  		filteredTaqs:function(){
+	  			return this.taquerias.filter((taq)=>{
+	  				return taq.name.match(this.search)
+	  			})
+	  		}
 	  	}
 	}
 </script>

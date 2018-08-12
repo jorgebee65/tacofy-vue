@@ -68,7 +68,23 @@
 				    			<md-radio v-model="radio" class="radioOp" value="local">Local</md-radio>
 				    			<md-radio v-model="radio" class="radioOp" value="restaurante">Restaurante</md-radio>
 					    </md-list>
-					    <md-button type="submit" class="md-raised md-primary">Actualizar</md-button>
+					</div>
+					<div class="viewport">
+						<md-toolbar :md-elevation="1">
+					      <span class="md-title">Amenidades</span>
+					    </md-toolbar>
+					    <md-list class="md-double-line">
+					    	<md-list-item v-for="ame in amenidades" v-bind:key="ame.id">
+					    		<md-icon class="md-primary">{{ame.icon}}</md-icon>
+					    		<div class="md-list-item-text">
+							    	<md-checkbox v-model="selectedAmen" v-bind:value="ame">{{ame.name}}</md-checkbox>
+								</div>
+					        </md-list-item>
+					    </md-list>
+					</div>
+					<input v-model="loadAmen">
+					<div>
+						<md-button type="submit" class="md-raised md-primary">Actualizar</md-button>
 						<md-button class="md-raised" :md-ripple="false" to="/">Cancelar</md-button>
 					</div>
 				</form>	
@@ -88,10 +104,14 @@
 	  			urlImage:null,
 	  			phone:null,
 	  			radio:null,
-	  			description:null
+	  			description:null,
+	  			amenidades:[],
+      			selectedAmen:[],
+      			loadAmen:[]
 			}
 		},
 		beforeRouteEnter(to,from,next){
+			console.log('beforeRouteEnter()')
 			db.collection('taquerias').where('taq_id',
 				'==',to.params.taq_id).get()
 			.then(querySnapshot =>{
@@ -104,6 +124,7 @@
 	  					vm.phone=doc.data().phone
 	  					vm.radio=doc.data().type
 	  					vm.description=doc.data().description
+	  					vm.loadAmen = doc.data().amenities
 					})
 				})
 			})
@@ -113,6 +134,7 @@
 		},
 		methods:{
 			fetchData(){
+				console.log('fetchData()')
 				db.collection('taquerias').where('taq_id',
 				'==',this.$route.params.taq_id).get()
 			.then(querySnapshot =>{
@@ -124,6 +146,7 @@
 	  				this.phone=doc.data().phone
 	  				this.radio=doc.data().type
 	  				this.description=doc.data().description
+	  				this.loadAmen=doc.data().amenities
 				})
 			})
 			},
@@ -138,7 +161,8 @@
 						picture: this.urlImage,
 						phone: this.phone,
 						type: this.radio,
-						description: this.description
+						description: this.description,
+						amenities: this.selectedAmen
 					}).then(()=>{
 						this.$router.push({name:'view-element',
 							params:{taq_id:this.taqId}})
@@ -146,6 +170,25 @@
 				})
 			})
 			}
+		},
+		created(){
+				console.log('created()')
+		  		db.collection('amenidades').get().then(
+		  			querySnapshot=>{
+		  				querySnapshot.forEach(doc =>{
+		  					const data = {
+		  						'id':doc.id,
+		  						'name':doc.data().name,
+		  						'icon':doc.data().icon
+		  					}
+		  					this.amenidades.push(data)
+		  				})
+		  		})
+		},
+		mounted(){
+			console.log('todo:'+this.amenidades)
+			this.selectedAmen.push(this.amenidades)
+			console.log('after'+this.selectedAmen)
 		}
 	}
 </script>

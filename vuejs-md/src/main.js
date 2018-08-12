@@ -6,8 +6,10 @@ import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/black-green-light.css'
 import App from './App'
 import router from './router'
-import VueSweetalert2 from 'vue-sweetalert2';
- 
+import VueSweetalert2 from 'vue-sweetalert2'
+import Toasted from 'vue-toasted';
+
+Vue.use(Toasted) 
 Vue.use(VueSweetalert2);
 
 Vue.config.productionTip = false

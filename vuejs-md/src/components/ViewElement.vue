@@ -28,6 +28,11 @@
 			            <md-button>9:00PM</md-button>
 			          </div>
 			        </div>
+			        <div>
+			        	<md-chip v-for="ame in amenidades" v-bind:key="ame.id">
+			        		{{ame.name}}
+			        	</md-chip>
+			        </div>
 			      </md-card-content>
 
 			      <md-card-actions>
@@ -50,7 +55,8 @@
 	  			address:null,
 	  			picture:null,
 	  			phone:null,
-	  			description:null
+	  			description:null,
+	  			amenidades:[]
 			}
 		},
 		beforeRouteEnter(to,from,next){
@@ -65,6 +71,7 @@
 	  					vm.picture=doc.data().picture
 	  					vm.phone=doc.data().phone
 	  					vm.description=doc.data().description
+	  					vm.amenidades=doc.data().amenities
 					})
 				})
 			})
@@ -84,6 +91,7 @@
 	  				this.picture=doc.data().picture
 	  				this.phone=doc.data().phone
 	  				this.description=doc.data().description
+	  				this.amenidades=doc.data().amenities
 				})
 			})
 			},
@@ -103,22 +111,16 @@
 							.then(querySnapshot =>{
 								querySnapshot.forEach(doc => {
 								doc.ref.delete()
+								this.$toasted.show("Taqueria eliminada correctamente", { 
+									 theme: "bubble", 
+									 position: "top-right", 
+									 duration : 5000
+								})
 								this.$router.push('/')
 								})
 							})
 						  }
 						})
-				/*
-				if(confirm('Are you sure?')){
-					db.collection('taquerias').where('taq_id',
-					'==',this.$route.params.taq_id).get()
-					.then(querySnapshot =>{
-						querySnapshot.forEach(doc => {
-						doc.ref.delete()
-						this.$router.push('/')
-						})
-					})
-				}*/
 			}
 		}
 	}
